@@ -1,0 +1,19 @@
+{
+  "name": "testnana",
+  "version": "1.0.0",
+  "description": "Test on flixtour Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "website",
+    "test"
+  ],
+  "author": "Nana Addo",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^13.13.2",
+    "dotenv": "^16.4.5"
+  }
+}
