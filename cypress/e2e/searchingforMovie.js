@@ -1,17 +1,29 @@
 // cypress/e2e/login.js
+/// <reference types="cypress" />
 
-import { clickWatchNow } from '../support/helpers/watchNow';
-import { searchMovieByTitle } from '../support/helpers/searchMovie';
+import { searchMovieByTitle } from '../support/helpers/searchMovie'
+import { visitHome} from '../support/helpers/signIn'
+import { handlePagination } from '../support/helpers/pageNav'
+
 
 describe('template spec', () => {
-  it('passes', () => {
-    // Use the custom command to sign into the account
-    cy.signIntoAccount();
-
+  
+  beforeEach ('SignIn',()=>{
+    cy.signIntoAccount()
+  })
+  
+  it('movieSearchUsingSearchBox', () => {
     // Ensure the home page is loaded
-    cy.visit('/home');
+    visitHome()
 
     // Search for the movie
     searchMovieByTitle('Grown Ups')
-  });
-});
+  })
+
+  it.only('navigating through categories',()=>{
+    // Ensure the home page is loaded
+    visitHome()
+    handlePagination(5)
+    //
+  })
+})
