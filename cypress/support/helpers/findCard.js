@@ -1,25 +1,30 @@
-// cypress/support/helpers/findCardByText.js
+import selectors from './util/selectors';
 
 export const findCardByText = (text) => {
-  return cy.get('#content').find('.card.cardthumb.front.m-0').then(($cards) => {
+  const upperCaseText = text.toUpperCase();
+
+  return cy.get(selectors.content).find(selectors.cardFront).then(($cards) => {
     let foundCard = null;
 
-    $cards.each((index, $card) => {
-      cy.wrap($card).within(() => {
-        cy.get('.card-footer.mt-auto.text-center').then(($footer) => {
-          if ($footer.text().includes(text)) {
+    return cy.wrap($cards).each(($card) => {
+      return cy.wrap($card).within(() => {
+        return cy.get(selectors.cardFooter).then(($footer) => {
+          const footerText = $footer.text().trim().toUpperCase();
+
+          // Check for exact match rather than includes
+          if (footerText === upperCaseText) {
             foundCard = $card;
-            
-            return false; // Break the loop
+            return false; // Stop iteration
           }
         });
       });
-
+    }).then(() => {
       if (foundCard) {
-        return false; // Break the loop
+        return cy.wrap(foundCard);
+      } else {
+        cy.log(`Card with text "${text}" not found`);
+        return null;
       }
     });
-
-    return foundCard ? cy.wrap(foundCard) : null;
   });
 };

@@ -1,54 +1,65 @@
-export const handlePagination = (lastPage) => {
-  const nextButtonSelector = '.pagination a.page-link.navb:contains("Next")';
-  const contentSelector = '#content';
-  
-  // Unified intercept for movies, TV shows, and episodes
-  cy.intercept('GET', '**/ajax/show/**').as('getContent');
+import selectors from './util/selectors';
 
+export const navigatePages = (lastPage, onPageAction) => {
   const clickNextIfAvailable = () => {
-    cy.get(nextButtonSelector).then(nextButtons => {
-      const nextButton = nextButtons.filter((index, button) => !Cypress.$(button).parent().hasClass('disabled')).first();
-      const currentPage = parseInt(nextButton.attr('data-p')) - 1;
-      const lastPageForCat = parseInt(nextButtons.last().attr('data-p'));
+    cy.get(selectors.paginationNextButton).then(nextButtons => {
+      const nextButton = nextButtons.filter((index, button) => {
+        const isDisabled = Cypress.$(button).parent().hasClass('disabled');
+        const hasPointerEventsNone = Cypress.$(button).css('pointer-events') === 'none';
+        return !isDisabled && !hasPointerEventsNone;
+      }).first();
 
-      const effectiveLastPage = Math.min(lastPage, lastPageForCat);
+      if (nextButton.length > 0) {
+        const currentPage = parseInt(nextButton.attr('data-p')) - 1;
+        const lastPageForCat = parseInt(nextButtons.last().attr('data-p'));
 
-      cy.log(`Current Page: ${currentPage}, Last Page: ${effectiveLastPage}`);
-      
-      if (currentPage < effectiveLastPage) {
-        cy.wrap(nextButton).click({ force: true });
+        const effectiveLastPage = Math.min(lastPage || lastPageForCat, lastPageForCat);
 
-        // Wait for the network request to complete
-        cy.wait('@getContent').then(() => {
-          cy.get(contentSelector).should('not.have.class', 'loading');
-          cy.get(contentSelector).should('exist'); // Ensure the content exists after loading
-          cy.wait(1000); // Optionally, add a fixed wait time if necessary
-          clickNextIfAvailable(); // Recursively call to go to the next page
-        });
+        cy.log(`Current Page: ${currentPage}, Last Page: ${effectiveLastPage}`);
+          // Set up intercept and alias before the click
+          cy.intercept('GET', '**/ajax/show/**').as('getContent');
+        if (currentPage < effectiveLastPage) {
+          cy.wrap(nextButton)
+            .should('be.visible')
+            .click(); // Click the button
+
+          // Introduce a delay of 1000ms (1 second) before waiting for the new content
+          cy.wait(1000); // Adjust the delay duration as needed
+
+          cy.wait('@getContent').then(() => {
+            cy.get(selectors.content).should('not.have.class', 'loading');
+            cy.get(selectors.content).should('exist'); // Ensure the content exists after loading
+
+            // Introduce a delay before calling the function again
+            cy.wait(1000); // Another delay before moving to the next page
+
+            return clickNextIfAvailable(); // Recursively call to go to the next page
+          });
+        } else {
+          cy.log('Reached the last page. Returning to the first page.');
+          goToFirstPage();
+        }
       } else {
-        cy.log('Reached the specified page limit or last page');
+        cy.log('No more pages to navigate or Next button is disabled.');
+        goToFirstPage();
       }
     });
   };
 
-  const navSelector = '.nav-item';
-
-  const selectCategory = () => {
-    const categories = ['Movies', 'TV Shows', 'TV Episodes'];
-
-    categories.forEach(category => {
-      cy.get(navSelector).contains(category).click().then(() => {
-        cy.wait('@getContent').then(() => {
-          cy.get(contentSelector).should('not.have.class', 'loading');
-          cy.get(contentSelector).should('exist'); // Ensure the content exists after loading
-          cy.wait(1000); // Optionally, add a fixed wait time if necessary
-          clickNextIfAvailable();
-        });
-      });
+  const goToFirstPage = () => {
+    cy.get('a.page-link.navb.text-info[data-p="1"]').first().then(firstButton => {
+      if (firstButton.length > 0) {
+        cy.wrap(firstButton)
+          .should('be.visible')
+          .click();
+        cy.wait(1000); // Wait for the first page to load
+        cy.log('Returned to the first page, ending test.');
+        // End the test or perform any other final actions here
+      } else {
+        cy.log('First page button not found, ending test.');
+      }
     });
   };
-  
-  selectCategory();
-};
 
-export default handlePagination;
+  clickNextIfAvailable();
+};
