@@ -12,15 +12,15 @@ describe('template spec', () => {
     cy.signIntoAccount()
   })
   
-  it('movieSearchUsingSearchBox', () => {
+  it.only('movieSearchUsingSearchBox', () => {
     // Ensure the home page is loaded
     visitHome()
 
     // Search for the movie
-    searchMovieByTitle('Grown Ups')
+    searchMovieByTitle('Bad boys')
   })
 
-  it.only('navigating through categories',()=>{
+  it('navigating through categories',()=>{
     // Ensure the home page is loaded
     visitHome()
     handlePagination(5)
