@@ -131,7 +131,3 @@ This Cypress test suite provides a solid foundation for automated testing of the
 ## Contributing
 
 We welcome contributions to improve this test suite. Please submit a pull request or open an issue to discuss any changes or new ideas.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
