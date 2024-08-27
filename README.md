@@ -66,9 +66,7 @@ Ensure you have the following installed on your machine:
 
 To run the tests interactively, where you can see the tests executing in real-time:
 
-```bash
 npx cypress open
-```
 
 This command opens the Cypress Test Runner, allowing you to run individual test files or all tests at once.
 
@@ -76,9 +74,8 @@ This command opens the Cypress Test Runner, allowing you to run individual test 
 
 To run all tests in headless mode (useful for CI/CD environments):
 
-```bash
 npx cypress run
-```
+
 
 This will execute all the tests in the terminal, and the results will be displayed after completion.
 
@@ -122,8 +119,7 @@ This will execute all the tests in the terminal, and the results will be display
 
 The test suite is designed to be scalable and maintainable. Here are some areas for potential improvements:
 
-- **Integration with CI/CD**: While the suite is ready for CI/CD integration, adding more robust reporting tools and notifications (e.g., Slack, email) will enhance continuous feedback.
-- **Cross-Browser Testing**: Currently, the tests are optimized for a single browser environment (usually Chrome). Expanding the tests to run across multiple browsers (e.g., Firefox, Edge) would increase coverage.
+- **Integration with CI/CD**: While the suite is ready for CI/CD integration, adding more robust reporting tools and notifications will enhance continuous feedback.
 - **API Testing**: Integrating API tests to validate the backend services independently of the UI would ensure comprehensive coverage of the application.
 - **Performance Testing**: Incorporating performance metrics into the tests (e.g., page load times, response times) could help identify performance bottlenecks.
 - **Accessibility Testing**: Adding automated accessibility checks to ensure the application meets WCAG standards.
@@ -139,70 +135,3 @@ We welcome contributions to improve this test suite. Please submit a pull reques
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-
-
-# FlixTour Cypress Test Suite
-
-## Overview
-
-The FlixTour Cypress Test Suite is designed to ensure the robustness and reliability of the FlixTour application. This suite covers critical user journeys, such as movie search functionality, page navigation, and user authentication. The primary goal is to automate end-to-end tests that validate the core functionalities of the application, providing quick feedback on the stability of the system.
-
-## Purpose and Goals
-
-The purpose of this test suite is to:
-
-- **Automate Critical Workflows**: Automate the testing of key user workflows to reduce manual testing efforts and catch regressions early.
-- **Ensure Functional Accuracy**: Verify that the application behaves as expected across different user scenarios, especially focusing on search functionalities and user authentication.
-- **Support Continuous Integration**: Integrate the tests into a CI/CD pipeline to enable continuous testing and feedback.
-- **Facilitate Future Enhancements**: Provide a modular and maintainable codebase that can be easily extended to include new tests as the application evolves.
-
-## Technology and Tools
-
-This test suite is built using the following technologies and tools:
-
-- **[Cypress](https://www.cypress.io/)**: A fast, easy-to-use end-to-end testing framework that handles complex UI testing scenarios with ease.
-- **JavaScript (ES6+)**: The programming language used to write the test scripts.
-- **Node.js**: The runtime environment for executing the Cypress tests.
-- **npm**: The package manager used to manage dependencies.
-
-## Installation
-
-### Prerequisites
-
-Ensure you have the following installed on your machine:
-
-- **Node.js** (version 12 or higher): 
-  - You can download it from the official [Node.js website](https://nodejs.org/en/download/).
-  - **Terminal Alternative**: You can install Node.js using a package manager. For example, on macOS you can use Homebrew:
-    ```bash
-    brew install node
-    ```
-    On Ubuntu or other Debian-based systems:
-    ```bash
-    sudo apt update
-    sudo apt install nodejs
-    sudo apt install npm
-    ```
-    On Windows, you can use [chocolatey](https://chocolatey.org/):
-    ```bash
-    choco install nodejs
-    ```
-
-- **npm** (version 6 or higher):
-  - npm is included with Node.js, so installing Node.js will also install npm.
-  - **Terminal Alternative**: To update npm to the latest version, you can run:
-    ```bash
-    npm install -g npm
-    ```
-
-- A stable internet connection to install dependencies.
-
-### Setup
-
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https://github.com/yourusername/flix-tour-cypress.git
-   cd flix-tour-cypress
